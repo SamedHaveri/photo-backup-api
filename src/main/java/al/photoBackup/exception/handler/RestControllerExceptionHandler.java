@@ -4,8 +4,6 @@ import al.photoBackup.exception.auth.FunctionExpiredException;
 import al.photoBackup.exception.auth.FunctionNotAllowedForUserException;
 import al.photoBackup.exception.auth.FunctionNotAuthorisedException;
 import al.photoBackup.exception.auth.FunctionTimedOutException;
-import al.photoBackup.exception.company.CompanyNameExistsException;
-import al.photoBackup.exception.company.CompanyNotFoundException;
 import al.photoBackup.exception.user.UserIdNotFoundException;
 import al.photoBackup.exception.user.UserNameExistsException;
 import al.photoBackup.exception.user.UserNameNotFoundException;
@@ -22,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
 import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice
@@ -63,14 +62,14 @@ public class RestControllerExceptionHandler {
 		return new ResponseEntity<>(new ErrorDetails(error), new HttpHeaders(), HttpStatus.BAD_REQUEST);
 	}
 
-	@ExceptionHandler({UserNameExistsException.class, CompanyNameExistsException.class})
+	@ExceptionHandler({UserNameExistsException.class})
 	@ResponseStatus(value = HttpStatus.CONFLICT)
 	private ErrorDetails handleConflict(Exception e, WebRequest request) {
 		return new ErrorDetails(e.getMessage());
 	}
 
 	@ExceptionHandler({UserIdNotFoundException.class, UserRoleNameNotFoundException.class,
-			UserNameNotFoundException.class, CompanyNotFoundException.class})
+			UserNameNotFoundException.class})
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
 	private ErrorDetails handleNotFound(Exception e, WebRequest request) {
 		return new ErrorDetails(e.getMessage());

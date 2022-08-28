@@ -4,17 +4,14 @@ import al.photoBackup.model.constant.Status;
 import al.photoBackup.model.entity.UserEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Objects;
-import java.util.Set;
 
 public class SecurityUserDetails implements UserDetails {
-	private Integer id, status, companyId;
+	private Integer id, status;
 	private String username;
-
 	@JsonIgnore
 	private String password;
 
@@ -25,8 +22,6 @@ public class SecurityUserDetails implements UserDetails {
 		this.username = userEntity.getUsername();
 		this.password = userEntity.getPassword();
 		this.status = userEntity.getStatus();
-		this.companyId = userEntity.getCompanyEntity().getId();
-		authorities = Set.of(new SimpleGrantedAuthority(userEntity.getRole()));
 	}
 
 	public static SecurityUserDetails build(UserEntity userEntity) {
@@ -45,7 +40,7 @@ public class SecurityUserDetails implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return authorities;
+		return null;
 	}
 
 	@Override
@@ -86,14 +81,6 @@ public class SecurityUserDetails implements UserDetails {
 		this.id = id;
 	}
 
-	public Integer getCompanyId() {
-		return companyId;
-	}
-
-	public void setCompanyId(Integer companyId) {
-		this.companyId = companyId;
-	}
-
 	public void setUsername(String username) {
 		this.username = username;
 	}
@@ -110,7 +97,4 @@ public class SecurityUserDetails implements UserDetails {
 		this.status = status;
 	}
 
-	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
-		this.authorities = authorities;
-	}
 }

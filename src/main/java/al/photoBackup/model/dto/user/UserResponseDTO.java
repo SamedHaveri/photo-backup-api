@@ -10,13 +10,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserResponseDTO {
-	private Integer id, companyId;
-	private String username, role;
+	private Integer id;
+	private String username;
 
 	public UserResponseDTO(UserEntity u) {
 		this.id = u.getId();
 		this.username = u.getUsername();
-		this.role = u.getRole();
-		this.companyId = u.getCompanyEntity().getId();
 	}
 }

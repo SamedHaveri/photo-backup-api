@@ -50,10 +50,10 @@ public class AuthenticationController {
 		SecurityContextHolder.getContext().setAuthentication(authentication); //update security context
 		final var jwtDTO = jwtUtil.generateJwtToken(authentication.getName());
 		final var userDetails = (UserDetails) authentication.getPrincipal();
-		final var userEntity = userService.getActiveByUsername(authentication.getName());
+		final var userEntity = userService.getByUsername(authentication.getName());
 		//return jwt token with user details
 		return ResponseEntity.ok(new AuthResponse(jwtDTO.getToken(), userEntity.getId(), userDetails.getUsername(),
-				userEntity.getRole(), jwtDTO.getTokenExpiration(), userEntity.getCompanyEntity().getId()));
+				jwtDTO.getTokenExpiration()));
 	}
 
 }
