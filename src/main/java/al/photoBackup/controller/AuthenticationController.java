@@ -6,8 +6,8 @@ import al.photoBackup.model.dto.user.UserAuthenticationRequest;
 import al.photoBackup.service.UserService;
 import al.photoBackup.util.JwtUtil;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,13 +21,13 @@ import javax.validation.Valid;
 @Validated
 @RestController
 public class AuthenticationController {
-	private final DaoAuthenticationProvider daoAuthenticationProvider;
+	private final AuthenticationManager authenticationManager;
 	private final UserService userService;
 	private final JwtUtil jwtUtil;
 
-	public AuthenticationController(DaoAuthenticationProvider daoAuthenticationProvider, JwtUtil jwtUtil,
+	public AuthenticationController(AuthenticationManager authenticationManager, JwtUtil jwtUtil,
 	                                UserService userService) {
-		this.daoAuthenticationProvider = daoAuthenticationProvider;
+		this.authenticationManager = authenticationManager;
 		this.userService = userService;
 		this.jwtUtil = jwtUtil;
 	}
@@ -44,7 +44,7 @@ public class AuthenticationController {
 	public ResponseEntity<AuthResponse> generateToken(@Valid @RequestBody UserAuthenticationRequest authenticationRequest)
 			throws UserNameNotFoundException {
 		Authentication authentication;
-		authentication = daoAuthenticationProvider.authenticate(
+		authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
 						authenticationRequest.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication); //update security context
