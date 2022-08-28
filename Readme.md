@@ -26,8 +26,8 @@ to `true` and defining login credentials.
 - set allowedOrigins to WebConfig
 - set values in application-prod.properties
 - run **mvn install**
-- upload generated file to **/opt/fiskalization-b2b/target**
-- create/restart linux service fiskalization-b2b.service
+- upload generated file to **/opt/photoBackup/target**
+- create/restart linux service photoBackup.service
 - config iptable rules
 
 <hr>
