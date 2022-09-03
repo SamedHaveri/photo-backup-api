@@ -17,11 +17,14 @@ public class UserEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	@Column(unique = true, name = "username", nullable = false)
+	private String username;
+
 	@Column(name = "password", nullable = false)
 	private String password;
 
-	@Column(unique = true, name = "username", nullable = false)
-	private String username;
+	@Column(name = "unique_folder", nullable = false)
+	private String uniqueFolder;
 
 	@Column(name = "status", nullable = false)
 	private int status;

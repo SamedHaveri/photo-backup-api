@@ -4,6 +4,8 @@ import al.photoBackup.exception.auth.FunctionExpiredException;
 import al.photoBackup.exception.auth.FunctionNotAllowedForUserException;
 import al.photoBackup.exception.auth.FunctionNotAuthorisedException;
 import al.photoBackup.exception.auth.FunctionTimedOutException;
+import al.photoBackup.exception.files.ErrorCreatingDirectoryException;
+import al.photoBackup.exception.files.FileIsNotAnImageException;
 import al.photoBackup.exception.user.UserIdNotFoundException;
 import al.photoBackup.exception.user.UserNameExistsException;
 import al.photoBackup.exception.user.UserNameNotFoundException;
@@ -62,7 +64,11 @@ public class RestControllerExceptionHandler {
 		return new ResponseEntity<>(new ErrorDetails(error), new HttpHeaders(), HttpStatus.BAD_REQUEST);
 	}
 
-	@ExceptionHandler({UserNameExistsException.class})
+	@ExceptionHandler({FileIsNotAnImageException.class})
+	@ResponseStatus(value = HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+	private ErrorDetails handleBadMediaType(Exception e, WebRequest request) {return new ErrorDetails(e.getMessage());}
+
+	@ExceptionHandler({UserNameExistsException.class, ErrorCreatingDirectoryException.class})
 	@ResponseStatus(value = HttpStatus.CONFLICT)
 	private ErrorDetails handleConflict(Exception e, WebRequest request) {
 		return new ErrorDetails(e.getMessage());

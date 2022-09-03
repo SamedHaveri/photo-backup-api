@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -54,6 +56,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 			user.setUsername("username");
 			user.setPassword(passwordEncoder.encode("password"));
 			user.setStatus(Status.ACTIVE.getStatus());
+			user.setUniqueFolder(user.getUsername() +"-"+LocalDateTime.now());
 			try {
 				System.out.println("saving user: " + user);
 				userService.save(user);
