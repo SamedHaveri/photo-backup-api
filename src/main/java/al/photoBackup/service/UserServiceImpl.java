@@ -50,6 +50,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public UserEntity getById(Integer id) throws UserIdNotFoundException {
+		return userRepository.findById(id).orElseThrow(UserIdNotFoundException::new);
+	}
+
+	@Override
 	@Transactional
 	public void disableUser(Integer id) throws UserNameNotFoundException {
 		var userFound = userRepository.getById(id);

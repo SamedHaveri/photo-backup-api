@@ -4,8 +4,10 @@ import al.photoBackup.exception.auth.FunctionExpiredException;
 import al.photoBackup.exception.auth.FunctionNotAllowedForUserException;
 import al.photoBackup.exception.auth.FunctionNotAuthorisedException;
 import al.photoBackup.exception.auth.FunctionTimedOutException;
+import al.photoBackup.exception.files.FileDownloadFailedException;
 import al.photoBackup.exception.files.ErrorCreatingDirectoryException;
 import al.photoBackup.exception.files.FileIsNotAnImageException;
+import al.photoBackup.exception.files.CustomFileNotFoundException;
 import al.photoBackup.exception.user.UserIdNotFoundException;
 import al.photoBackup.exception.user.UserNameExistsException;
 import al.photoBackup.exception.user.UserNameNotFoundException;
@@ -74,8 +76,14 @@ public class RestControllerExceptionHandler {
 		return new ErrorDetails(e.getMessage());
 	}
 
+	@ExceptionHandler({FileDownloadFailedException.class})
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+	private ErrorDetails handleError(Exception e, WebRequest request) {
+		return new ErrorDetails(e.getMessage());
+	}
+
 	@ExceptionHandler({UserIdNotFoundException.class, UserRoleNameNotFoundException.class,
-			UserNameNotFoundException.class})
+			UserNameNotFoundException.class, CustomFileNotFoundException.class})
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
 	private ErrorDetails handleNotFound(Exception e, WebRequest request) {
 		return new ErrorDetails(e.getMessage());

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 public interface UserService extends UserDetailsService {
 
     UserEntity getByUsername(String username) throws UserNameNotFoundException;
+    UserEntity getById(Integer id) throws UserIdNotFoundException;
 
     UserEntity updatePassword(String currentLoggedUsername, UserPasswordDTO dto) throws WrongPasswordException, UserNameNotFoundException;
 

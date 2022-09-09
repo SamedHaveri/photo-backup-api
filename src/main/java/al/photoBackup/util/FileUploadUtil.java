@@ -31,6 +31,7 @@ public class FileUploadUtil {
             file.createNewFile();
             multipartFile.transferTo(Paths.get(filePath));
         } catch (IOException e) {
+            System.out.println(e.getMessage());
             throw new ErrorCreatingFileException();
         }
         return filePath;
