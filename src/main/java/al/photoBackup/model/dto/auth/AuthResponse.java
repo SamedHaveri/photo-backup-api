@@ -14,6 +14,6 @@ public class AuthResponse {
     private String token;
     private Integer id;
     private String username;
-    @JsonFormat(pattern="MM/dd/yyyy HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime tokenExpiration;
 }

@@ -12,12 +12,10 @@ public class FileResponseDTO {
     private Long id;
     private String name;
     private Long size;
-    private Integer userId;
 
     public FileResponseDTO(FileEntity entity){
         this.id = entity.getId();
         this.name = entity.getName();
         this.size = entity.getSize();
-        this.userId = entity.getUserEntity().getId();
     }
 }
