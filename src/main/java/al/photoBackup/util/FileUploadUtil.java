@@ -1,7 +1,7 @@
 package al.photoBackup.util;
 
-import al.photoBackup.exception.files.ErrorCreatingDirectoryException;
-import al.photoBackup.exception.files.ErrorCreatingFileException;
+import al.photoBackup.exception.file.ErrorCreatingDirectoryException;
+import al.photoBackup.exception.file.ErrorCreatingFileException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;

@@ -1,9 +1,9 @@
 package al.photoBackup.service;
 
-import al.photoBackup.exception.files.CustomFileNotFoundException;
-import al.photoBackup.exception.files.ErrorCreatingDirectoryException;
-import al.photoBackup.exception.files.ErrorCreatingFileException;
-import al.photoBackup.exception.files.FileDownloadFailedException;
+import al.photoBackup.exception.file.CustomFileNotFoundException;
+import al.photoBackup.exception.file.ErrorCreatingDirectoryException;
+import al.photoBackup.exception.file.ErrorCreatingFileException;
+import al.photoBackup.exception.file.FileDownloadFailedException;
 import al.photoBackup.exception.user.UserIdNotFoundException;
 import al.photoBackup.exception.user.UserNameNotFoundException;
 import al.photoBackup.model.entity.FileEntity;

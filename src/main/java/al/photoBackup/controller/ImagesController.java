@@ -1,6 +1,6 @@
 package al.photoBackup.controller;
 
-import al.photoBackup.exception.files.*;
+import al.photoBackup.exception.file.*;
 import al.photoBackup.exception.user.UserIdNotFoundException;
 import al.photoBackup.exception.user.UserNameNotFoundException;
 import al.photoBackup.model.dto.image.ImageResponseDTO;
