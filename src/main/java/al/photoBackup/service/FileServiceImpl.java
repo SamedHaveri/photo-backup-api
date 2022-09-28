@@ -42,7 +42,8 @@ public class FileServiceImpl implements FileService {
         FileEntity fileEntity = new FileEntity();
         fileEntity.setUserEntity(user);
         Path pathToAFile = Paths.get(filePath);
-        fileEntity.setName(pathToAFile.getFileName().toString());
+        fileEntity.setName(multipartFile.getOriginalFilename());
+        fileEntity.setFileName(pathToAFile.getFileName().toString());
         fileEntity.setSize(multipartFile.getSize());
         return fileRepository.save(fileEntity);
     }
@@ -53,7 +54,7 @@ public class FileServiceImpl implements FileService {
         var fileEntity = fileRepository.getByIdAndUsername(fileId, userId);
         if (fileEntity == null)
             throw new CustomFileNotFoundException();
-        String filePath = ROOT_FOLDER + "/" + user.getUniqueFolder() + "/" + "files" + "/" + fileEntity.getName();
+        String filePath = ROOT_FOLDER + "/" + user.getUniqueFolder() + "/" + "files" + "/" + fileEntity.getFileName();
         try {
             return Files.readAllBytes(new File(filePath).toPath());
         } catch (IOException e) {

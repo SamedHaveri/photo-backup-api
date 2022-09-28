@@ -39,14 +39,16 @@ public class ImageServiceImpl implements ImageService {
         File f = new File(Objects.requireNonNull(multipartFile.getOriginalFilename()));
         String mimeType = new MimetypesFileTypeMap().getContentType(f);
         String type = mimeType.split("/")[0];
-        if (!type.equals("image"))
-            throw new FileIsNotAnImageException();
+//        System.out.println(mimeType);
+//        if (!(type.equals("image") || type.equals("video")))
+//            throw new FileIsNotAnImageException();
         var user = userService.getByUsername(username);
         String filePath = fileUploadUtil.saveFile(multipartFile, user.getUniqueFolder(), "images");
         ImageEntity imageEntity = new ImageEntity();
         imageEntity.setUserEntity(user);
         Path pathToAFile = Paths.get(filePath);
-        imageEntity.setName(pathToAFile.getFileName().toString());
+        imageEntity.setName(multipartFile.getOriginalFilename());
+        imageEntity.setFileName(pathToAFile.getFileName().toString());
         imageEntity.setSize(multipartFile.getSize());
         return imageRepository.save(imageEntity);
     }
@@ -57,7 +59,7 @@ public class ImageServiceImpl implements ImageService {
         var imageEntity = imageRepository.getByIdAndUsername(imageId, userId);
         if (imageEntity == null)
             throw new CustomFileNotFoundException();
-        String filePath = ROOT_FOLDER + "/" + user.getUniqueFolder() + "/" + "images" + "/" + imageEntity.getName();
+        String filePath = ROOT_FOLDER + "/" + user.getUniqueFolder() + "/" + "images" + "/" + imageEntity.getFileName();
         try {
             return Files.readAllBytes(new File(filePath).toPath());
         } catch (IOException e) {

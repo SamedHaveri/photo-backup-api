@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Component
 public class FileUploadUtil {
@@ -19,9 +20,8 @@ public class FileUploadUtil {
     public String saveFile(MultipartFile multipartFile, String uniqueFolderName, String subfolder)
             throws ErrorCreatingDirectoryException, ErrorCreatingFileException {
         String uploadPath = FOLDER_PATH + "/" + uniqueFolderName +"/"+ subfolder+"/";
-        System.out.println(uploadPath);
         File directory = new File(uploadPath);
-        String filePath = uploadPath + multipartFile.getOriginalFilename() +"-"+ LocalDateTime.now();
+        String filePath = uploadPath + UUID.randomUUID() +"-"+ LocalDateTime.now();
         File file = new File(filePath);
         if(!directory.exists()){
             if(!directory.mkdirs())

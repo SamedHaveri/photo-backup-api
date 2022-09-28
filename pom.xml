@@ -5,19 +5,18 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.1</version>
+		<version>2.7.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>al.equity</groupId>
-	<artifactId>fiskalization.b2b</artifactId>
+	<artifactId>al.photobackup</artifactId>
 	<version>1.0</version>
-	<name>fiskalization_b2b</name>
-	<description>Backend RestAPI for Fiskalization B2B</description>
+	<name>PhotoBackup</name>
 
 	<developers>
 		<developer>
-			<name>Amarildo Gjeçaj</name>
-			<email>amarildogjecaj2@gmail.com</email>
+			<name>Samed Haveri</name>
+			<email>Samedhaveri@gmail.com</email>
 		</developer>
 	</developers>
 
