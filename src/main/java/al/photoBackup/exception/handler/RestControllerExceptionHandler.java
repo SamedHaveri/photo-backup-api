@@ -6,7 +6,7 @@ import al.photoBackup.exception.auth.FunctionNotAuthorisedException;
 import al.photoBackup.exception.auth.FunctionTimedOutException;
 import al.photoBackup.exception.file.FileDownloadFailedException;
 import al.photoBackup.exception.file.ErrorCreatingDirectoryException;
-import al.photoBackup.exception.file.FileIsNotAnImageException;
+import al.photoBackup.exception.file.FileIsNotMedia;
 import al.photoBackup.exception.file.CustomFileNotFoundException;
 import al.photoBackup.exception.user.UserIdNotFoundException;
 import al.photoBackup.exception.user.UserNameExistsException;
@@ -66,7 +66,7 @@ public class RestControllerExceptionHandler {
 		return new ResponseEntity<>(new ErrorDetails(error), new HttpHeaders(), HttpStatus.BAD_REQUEST);
 	}
 
-	@ExceptionHandler({FileIsNotAnImageException.class})
+	@ExceptionHandler({FileIsNotMedia.class})
 	@ResponseStatus(value = HttpStatus.UNSUPPORTED_MEDIA_TYPE)
 	private ErrorDetails handleBadMediaType(Exception e, WebRequest request) {return new ErrorDetails(e.getMessage());}
 

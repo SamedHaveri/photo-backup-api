@@ -3,9 +3,9 @@ package al.photoBackup.controller;
 import al.photoBackup.exception.file.*;
 import al.photoBackup.exception.user.UserIdNotFoundException;
 import al.photoBackup.exception.user.UserNameNotFoundException;
-import al.photoBackup.model.dto.image.ImageResponseDTO;
+import al.photoBackup.model.dto.image.MediaResponseDTO;
 import al.photoBackup.model.dto.user.SecurityUserDetails;
-import al.photoBackup.service.ImageService;
+import al.photoBackup.service.MediaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,18 +17,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/images")
-public class ImagesController {
-    private final ImageService imageService;
+public class MediaController {
+    private final MediaService mediaService;
 
-    public ImagesController(ImageService imageService) {
-        this.imageService = imageService;
+    public MediaController(MediaService mediaService) {
+        this.mediaService = mediaService;
     }
 
     @PostMapping("/upload")
     public ResponseEntity<Void> upload(@RequestParam MultipartFile file, Authentication auth)
-            throws UserNameNotFoundException, ErrorCreatingFileException, ErrorCreatingDirectoryException, FileIsNotAnImageException {
+            throws UserNameNotFoundException, ErrorCreatingFileException, ErrorCreatingDirectoryException, FileIsNotMedia {
         var userDetails = (SecurityUserDetails) auth.getPrincipal();
-        var response = imageService.saveImage(file, userDetails.getUsername());
+        var response = mediaService.saveImage(file, userDetails.getUsername());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -36,18 +36,24 @@ public class ImagesController {
     public ResponseEntity<?> download(@PathVariable Long id, Authentication auth)
             throws UserIdNotFoundException, CustomFileNotFoundException, FileDownloadFailedException {
         var userDetails = (SecurityUserDetails) auth.getPrincipal();
-        var response = imageService.downloadFile(id, userDetails.getId());
-        return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.valueOf("image/png"))
-                .body(response);
+        var response = mediaService.downloadFile(id, userDetails.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/download/thumbnail/id/{id}")
+    public ResponseEntity<?> downloadThumbnail(@PathVariable Long id, Authentication auth)
+            throws UserIdNotFoundException, CustomFileNotFoundException, FileDownloadFailedException {
+        var userDetails = (SecurityUserDetails) auth.getPrincipal();
+        var response = mediaService.downloadThumbnail(id, userDetails.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<ImageResponseDTO>> getImages(Authentication auth) {
+    public ResponseEntity<List<MediaResponseDTO>> getMedia(Authentication auth) {
         var userDetails = (SecurityUserDetails) auth.getPrincipal();
-        var response = imageService.getImages(userDetails.getId())
+        var response = mediaService.getMedia(userDetails.getId())
                 .stream()
-                .map(ImageResponseDTO::new)
+                .map(MediaResponseDTO::new)
                 .toList();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

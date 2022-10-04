@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -11,8 +12,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "images")
-public class ImageEntity {
+@Table(name = "media")
+public class MediaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,5 +33,17 @@ public class ImageEntity {
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @ToString.Exclude
     private UserEntity userEntity;
+
+    @Column(name = "added_at", nullable = false)
+    private LocalDateTime addedAt;
+
+    @Column(name = "media_type", nullable = false)
+    private String mediaType;
+
+    @Column(name = "mime_type", nullable = false)
+    private String mimeType;
+
+    @Column(name = "thumbnail_name", nullable = false)
+    private String thumbanilName;
 
 }
