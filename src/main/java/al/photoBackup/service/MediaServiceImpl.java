@@ -5,8 +5,10 @@ import al.photoBackup.exception.user.UserIdNotFoundException;
 import al.photoBackup.exception.user.UserNameNotFoundException;
 import al.photoBackup.model.entity.MediaEntity;
 import al.photoBackup.repository.ImageRepository;
+import al.photoBackup.util.FileSize;
 import al.photoBackup.util.FileUploadUtil;
 import al.photoBackup.util.ImageThumbnailGenerator;
+import al.photoBackup.util.VideoThumbnailGenerator;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -29,18 +31,20 @@ public class MediaServiceImpl implements MediaService {
     private final UserService userService;
     private final ImageRepository imageRepository;
     private final ImageThumbnailGenerator imageThumbnailGenerator;
+    private final VideoThumbnailGenerator videoThumbnailGenerator;
 
     public MediaServiceImpl(FileUploadUtil fileUploadUtil, UserService userService, ImageRepository imageRepository,
-                            ImageThumbnailGenerator imageThumbnailGenerator) {
+                            ImageThumbnailGenerator imageThumbnailGenerator, VideoThumbnailGenerator videoThumbnailGenerator) {
         this.fileUploadUtil = fileUploadUtil;
         this.userService = userService;
         this.imageRepository = imageRepository;
         this.imageThumbnailGenerator = imageThumbnailGenerator;
+        this.videoThumbnailGenerator = videoThumbnailGenerator;
     }
 
     @Override
     public MediaEntity saveImage(MultipartFile multipartFile, String username)
-            throws FileIsNotMedia, UserNameNotFoundException, ErrorCreatingFileException, ErrorCreatingDirectoryException {
+            throws FileIsNotMedia, UserNameNotFoundException, ErrorCreatingFileException, ErrorCreatingDirectoryException, IOException, InterruptedException {
 //        File f = new File(Objects.requireNonNull(multipartFile.getOriginalFilename()));
 //        String mimeType = new MimetypesFileTypeMap().getContentType(f);
 //        String type = mimeType.split("/")[0];
@@ -63,16 +67,20 @@ public class MediaServiceImpl implements MediaService {
         var user = userService.getByUsername(username);
         String filePath = fileUploadUtil.saveFile(multipartFile, user.getUniqueFolder(), "media");
         String thumbnailName;
+        String thumbnailMidName;
         if(mediaType.equals("image")){
             try {
-                thumbnailName = imageThumbnailGenerator.createThumbnail(multipartFile, user.getUniqueFolder()+"/media/thumbnails", mimeType);
+                thumbnailName = imageThumbnailGenerator.createThumbnail(multipartFile, user.getUniqueFolder()+"/media/thumbnails", mimeType, FileSize.LOW);
+                thumbnailMidName = imageThumbnailGenerator.createThumbnail(multipartFile, user.getUniqueFolder()+"/media/thumbnailsMid", mimeType, FileSize.MID);
             } catch (IOException e) {
                 //todo catch a proper exception
                 throw new RuntimeException(e);
             }
         }else if (mediaType.equals("video")){
-            //do video thumbnail
-            thumbnailName = "vid";
+            thumbnailName = videoThumbnailGenerator.makeThumbnail(new File(filePath),
+                    user.getUniqueFolder()+"/media/thumbnails", FileSize.LOW);
+            thumbnailMidName = videoThumbnailGenerator.makeThumbnail(new File(filePath),
+                    user.getUniqueFolder()+"/media/thumbnailsMid", FileSize.MID);
         }else throw new FileIsNotMedia();
 
         MediaEntity mediaEntity = new MediaEntity();
@@ -80,7 +88,8 @@ public class MediaServiceImpl implements MediaService {
         Path pathToAFile = Paths.get(filePath);
         mediaEntity.setName(multipartFile.getOriginalFilename());
         mediaEntity.setFileName(pathToAFile.getFileName().toString());
-        mediaEntity.setThumbanilName(thumbnailName);
+        mediaEntity.setThumbnailName(thumbnailName);
+        mediaEntity.setThumbnailMidName(thumbnailMidName);
         mediaEntity.setSize(multipartFile.getSize());
         mediaEntity.setMediaType(mediaType);
         mediaEntity.setMimeType(mimeType);
@@ -109,7 +118,22 @@ public class MediaServiceImpl implements MediaService {
         var imageEntity = imageRepository.getByIdAndUsername(imageId, userId);
         if (imageEntity == null)
             throw new CustomFileNotFoundException();
-        String filePath = ROOT_FOLDER + "/" + user.getUniqueFolder() + "/media/thumbnails/"+ imageEntity.getThumbanilName();
+        String filePath = ROOT_FOLDER + "/" + user.getUniqueFolder() + "/media/thumbnails/"+ imageEntity.getThumbnailName();
+        try {
+            return Files.readAllBytes(new File(filePath).toPath());
+        } catch (IOException e) {
+            throw new FileDownloadFailedException();
+        }
+    }
+
+    @Override
+    public byte[] downloadThumbnailMid(Long imageId, Integer userId) throws UserIdNotFoundException, CustomFileNotFoundException,
+            FileDownloadFailedException {
+        var user = userService.getById(userId);
+        var imageEntity = imageRepository.getByIdAndUsername(imageId, userId);
+        if (imageEntity == null)
+            throw new CustomFileNotFoundException();
+        String filePath = ROOT_FOLDER + "/" + user.getUniqueFolder() + "/media/thumbnailsMid/"+ imageEntity.getThumbnailMidName();
         try {
             return Files.readAllBytes(new File(filePath).toPath());
         } catch (IOException e) {

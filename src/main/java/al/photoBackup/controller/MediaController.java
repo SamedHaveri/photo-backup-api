@@ -13,10 +13,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/images")
+@RequestMapping("/media")
 public class MediaController {
     private final MediaService mediaService;
 
@@ -26,7 +27,8 @@ public class MediaController {
 
     @PostMapping("/upload")
     public ResponseEntity<Void> upload(@RequestParam MultipartFile file, Authentication auth)
-            throws UserNameNotFoundException, ErrorCreatingFileException, ErrorCreatingDirectoryException, FileIsNotMedia {
+            throws UserNameNotFoundException, ErrorCreatingFileException, ErrorCreatingDirectoryException, FileIsNotMedia,
+            IOException, InterruptedException {
         var userDetails = (SecurityUserDetails) auth.getPrincipal();
         var response = mediaService.saveImage(file, userDetails.getUsername());
         return new ResponseEntity<>(HttpStatus.OK);
@@ -42,6 +44,14 @@ public class MediaController {
 
     @GetMapping("/download/thumbnail/id/{id}")
     public ResponseEntity<?> downloadThumbnail(@PathVariable Long id, Authentication auth)
+            throws UserIdNotFoundException, CustomFileNotFoundException, FileDownloadFailedException {
+        var userDetails = (SecurityUserDetails) auth.getPrincipal();
+        var response = mediaService.downloadThumbnail(id, userDetails.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/download/thumbnail-mid/id/{id}")
+    public ResponseEntity<?> downloadThumbnailMid(@PathVariable Long id, Authentication auth)
             throws UserIdNotFoundException, CustomFileNotFoundException, FileDownloadFailedException {
         var userDetails = (SecurityUserDetails) auth.getPrincipal();
         var response = mediaService.downloadThumbnail(id, userDetails.getId());

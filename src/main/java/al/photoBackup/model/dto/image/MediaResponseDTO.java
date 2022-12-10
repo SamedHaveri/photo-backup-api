@@ -12,10 +12,12 @@ public class MediaResponseDTO {
     private Long id;
     private String name;
     private Long size;
+    private String mediaType;
 
     public MediaResponseDTO(MediaEntity entity){
         this.id = entity.getId();
         this.name = entity.getName();
         this.size = entity.getSize();
+        this.mediaType = entity.getMediaType();
     }
 }

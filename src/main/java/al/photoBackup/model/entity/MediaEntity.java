@@ -44,6 +44,9 @@ public class MediaEntity {
     private String mimeType;
 
     @Column(name = "thumbnail_name", nullable = false)
-    private String thumbanilName;
+    private String thumbnailName;
+
+    @Column(name = "thumbnail_mid_name", nullable = false)
+    private String thumbnailMidName;
 
 }
