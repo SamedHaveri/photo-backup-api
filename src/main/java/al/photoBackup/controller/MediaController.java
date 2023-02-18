@@ -54,7 +54,7 @@ public class MediaController {
     public ResponseEntity<?> downloadThumbnailMid(@PathVariable Long id, Authentication auth)
             throws UserIdNotFoundException, CustomFileNotFoundException, FileDownloadFailedException {
         var userDetails = (SecurityUserDetails) auth.getPrincipal();
-        var response = mediaService.downloadThumbnail(id, userDetails.getId());
+        var response = mediaService.downloadThumbnailMid(id, userDetails.getId());
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

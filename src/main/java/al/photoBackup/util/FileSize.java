@@ -1,8 +1,8 @@
 package al.photoBackup.util;
 
 public enum FileSize {
-    LOW(500),
-    MID(1000);
+    LOW(400),
+    MID(700);
 
     private final int size;
     FileSize(int i) {
