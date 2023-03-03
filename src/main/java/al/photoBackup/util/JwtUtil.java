@@ -27,7 +27,7 @@ public class JwtUtil {
 				.setExpiration(java.sql.Date.valueOf(expirationDateTime.toLocalDate()))
 				.signWith(secretKey, SignatureAlgorithm.HS512)
 				.compact();
-		return new TokenDTO(token, expirationDateTime);
+		return new TokenDTO(token, expirationDateTime.toLocalDate().atStartOfDay());
 	}
 
 	public String getUserNameFromJwtToken(String token) {
