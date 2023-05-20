@@ -1,4 +1,4 @@
-package al.photoBackup.util;
+package al.photoBackup.model.constant;
 
 public enum FileSize {
     LOW(400),

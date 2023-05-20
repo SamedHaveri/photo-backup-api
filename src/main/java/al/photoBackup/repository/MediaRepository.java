@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
 @Repository
-public interface ImageRepository extends JpaRepository<MediaEntity, Long> {
+public interface MediaRepository extends JpaRepository<MediaEntity, Long> {
     @Query("select i from MediaEntity as i where i.id = :id and i.userEntity.id = :userId")
-    MediaEntity getByIdAndUsername(@PathVariable("id") Long id, @PathVariable("userId") Integer userId);
+    MediaEntity getByIdAndUserId(@PathVariable("id") Long id, @PathVariable("userId") Integer userId);
 
     @Query("select i from MediaEntity as i where i.userEntity.id = :userId order by i.id desc")
     List<MediaEntity> getByUserEntity_Id(@Param("userId") Integer userId);

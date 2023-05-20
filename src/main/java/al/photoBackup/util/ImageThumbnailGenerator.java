@@ -1,6 +1,7 @@
 package al.photoBackup.util;
 
 import al.photoBackup.exception.file.ErrorCreatingDirectoryException;
+import al.photoBackup.model.constant.FileSize;
 import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

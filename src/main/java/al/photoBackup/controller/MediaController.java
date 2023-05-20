@@ -6,8 +6,8 @@ import al.photoBackup.exception.user.UserNameNotFoundException;
 import al.photoBackup.model.dto.image.MediaResponseDTO;
 import al.photoBackup.model.dto.user.SecurityUserDetails;
 import al.photoBackup.service.MediaService;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -30,16 +30,22 @@ public class MediaController {
             throws UserNameNotFoundException, ErrorCreatingFileException, ErrorCreatingDirectoryException, FileIsNotMedia,
             IOException, InterruptedException {
         var userDetails = (SecurityUserDetails) auth.getPrincipal();
-        var response = mediaService.saveImage(file, userDetails.getUsername());
+        var response = mediaService.saveMedia(file, userDetails.getUsername());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/id/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id, Authentication auth) throws CustomFileNotFoundException, UserIdNotFoundException {
+        var userDetails = (SecurityUserDetails) auth.getPrincipal();
+        mediaService.delete(id, userDetails.getId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/download/id/{id}")
-    public ResponseEntity<?> download(@PathVariable Long id, Authentication auth)
-            throws UserIdNotFoundException, CustomFileNotFoundException, FileDownloadFailedException {
+    public ResponseEntity<InputStreamResource> download(@PathVariable Long id, Authentication auth)
+            throws UserIdNotFoundException, CustomFileNotFoundException, FileDownloadFailedException, IOException {
         var userDetails = (SecurityUserDetails) auth.getPrincipal();
-        var response = mediaService.downloadFile(id, userDetails.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return mediaService.downloadMedia(id, userDetails.getId());
     }
 
     @GetMapping("/download/thumbnail/id/{id}")

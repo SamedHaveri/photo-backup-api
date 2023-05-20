@@ -49,4 +49,7 @@ public class MediaEntity {
     @Column(name = "thumbnail_mid_name", nullable = false)
     private String thumbnailMidName;
 
+    @Column(name = "compressed_video_name")
+    private String compressedVideoName;
+
 }
