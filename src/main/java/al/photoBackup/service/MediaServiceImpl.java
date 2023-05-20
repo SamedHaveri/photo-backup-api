@@ -135,6 +135,7 @@ public class MediaServiceImpl implements MediaService {
             assert filePath != null;
             var httpHeaders = new HttpHeaders();
             httpHeaders.setContentLength(Files.size(Path.of(filePath)));
+            httpHeaders.setContentType(org.springframework.http.MediaType.APPLICATION_OCTET_STREAM);
             var inputStreamResource = new InputStreamResource(new FileInputStream(filePath));
             return new ResponseEntity<>(inputStreamResource, httpHeaders, HttpStatus.OK);
         } catch (IOException e) {
