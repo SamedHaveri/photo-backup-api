@@ -8,7 +8,7 @@
 		<version>2.7.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>al.equity</groupId>
+	<groupId>al.samed</groupId>
 	<artifactId>photobackup</artifactId>
 	<version>1.0</version>
 	<name>PhotoBackup</name>

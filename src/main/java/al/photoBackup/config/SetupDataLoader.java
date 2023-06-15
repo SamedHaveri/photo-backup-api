@@ -21,15 +21,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
 	private boolean alreadySetup = false;
 
-//	@Value("#{'${al.equity.fiskalization.b2b.currencies}'.split(',')}")
-//	private List<String> currencies;
-//
-//	@Value("#{'${al.equity.fiskalization.b2b.currencies.signs}'.split(',')}")
-//	private List<String> currencySigns;
-//
-//	@Value("#{'${al.equity.fiskalization.b2b.receipt.types}'.split(',')}")
-//	private List<String> receiptTypes;
-
 	@Autowired
 	public SetupDataLoader(UserService userService,
 						   PasswordEncoder passwordEncoder) {
